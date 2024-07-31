@@ -5,19 +5,25 @@
   "item.the_vault_extras.advanced_vault_pearl_speed": "\u00A7eAdvanced Vault Pearl",
   "item.the_vault_extras.advanced_vault_pearl_explode": "\u00A7cAdvanced Vault Pearl",
   "item.the_vault_extras.cake_seal": "Cake: After Dark",
+  "item.the_vault_extras.mystery_rune": "Mystery Rune",
+  "item.the_vault_extras.mystery_book": "Mystery Book",
+  "item.the_vault_extras.bunny_charm": "Bunny Charm",
+  "item.the_vault_extras.vault_meal": "Vault Meal",
 
   "block.the_vault_extras.infusion_altar": "Infusion Altar",
   "block.the_vault_extras.vault_anvil": "Vault Anvil",
+  "block.the_vault_extras.vault_recycler": "Vault Recycler",
+  "block.the_vault_extras.sanctified_pedestal": "Sanctified Pedestal",
+  "block.the_vault_extras.decayed_crystallizer": "Decayed Crystallizer",
 
   "tooltip.the_vault_extras.cake_seal1": "\u00A78Seems inedible\u00A7r",
   "tooltip.the_vault_extras.cake_seal2": "\u00A75Your ticket to a buffet of cakes\u00A7r",
   "tooltip.the_vault_extras.vault_annihilator1": "\u00A7eForged by the Vault Gods\u00A7r",
   "tooltip.the_vault_extras.vault_annihilator2": "\u00A7eObliterates any block that crosses it's path\u00A7r",
-  "tooltip.the_vault_extras.advanced_vault_pearl_unbreakable": "Enhancement: \u00A7lINDESTRUCTABLE",
+  "tooltip.the_vault_extras.advanced_vault_pearl_unbreakable": "Enhancement: \u00A7lINDESTRUCTABLE\u00A7r",
   "tooltip.the_vault_extras.advanced_vault_pearl_speed": "Enhancement: \u00A7e\u00A7lSWIFT\u00A7r",
   "tooltip.the_vault_extras.advanced_vault_pearl_explode": "Enhancement: \u00A7c\u00A7lUNSTABLE\u00A7r",
-
-  "effect.the_vault_extras.extra_chest_rarity": "Extra Chest Rarity",
+  "tooltip.the_vault_extras.bunny_charm1": "\u00A7eAllows you to hop around like a bunny!\u00A7r",
 
   "command.the_vault_extras.difficulty.set": "The Difficulty has already been set to this value!",
   "command.the_vault_extras.difficulty.trivial": "Set difficulty to: Trivial",
@@ -25,8 +31,13 @@
   "command.the_vault_extras.difficulty.standard": "Set difficulty to: Standard",
   "command.the_vault_extras.difficulty.hard": "Set difficulty to: Hard",
   "command.the_vault_extras.difficulty.extreme": "Set difficulty to: Extreme",
+  "command.the_vault_extras.getplayerlevel.success": "%s's Vault Level is: %s",
+  "command.the_vault_extras.setFavour.success": "Added %s Favour(s) to %s",
 
+  "effect.the_vault_extras.extra_chest_rarity": "Extra Chest Rarity",
+  "screen.vault_extras.vault_recycler": "Vault Recycler",
   "itemGroup.vaultExtrasTab": "The Vault Extras",
+  "jei.the_vault_extras.recycle": "Vault Recycler",
   "jei.the_vault_extras.vendor": "Vendor Purchases",
   "the_vault_extras.hunter_cast": "Cast Ability Hunter",
   "the_vault_extras.mob_trap": "Mob Trap Activated",
@@ -34,5 +45,6 @@
   "key.the_vault_extras.magnet_toggle": "Toggle Magnet",
   "curios.identifier.magnet": "Magnet",
   "curios.identifier.vault_charm": "Vault Charm"
+
 }
 

@@ -13,6 +13,7 @@
     "MixinEntityEvents",
     "MixinHunterAbility",
     "MixinItemShardPouch",
+    "MixinItemStack",
     "MixinMobTrapEffects",
     "MixinModTasks",
     "MixinNameProviderPublic",
@@ -20,7 +21,10 @@
     "MixinPlayerEntity",
     "MixinPlayerEvents",
     "MixinPlayerInventory",
+    "MixinReloadConfigsCommand",
+    "MixinSummonEternalAbility",
     "MixinVaultGeneralConfig",
+    "MixinVaultInfluenceHandler",
     "MixinVaultMagnetItem",
     "MixinVaultPlayer",
     "MixinVaultRoomNames"

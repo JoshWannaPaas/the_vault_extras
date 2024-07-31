@@ -1,8 +1,13 @@
 package com.a1qs.the_vault_extras.init;
 
 import com.a1qs.the_vault_extras.VaultExtras;
+import com.a1qs.the_vault_extras.block.DecayedCrystallizer;
+import com.a1qs.the_vault_extras.block.SanctifiedPedestalBlock;
 import com.a1qs.the_vault_extras.block.VaultRecyclerBlock;
-import net.minecraft.block.*;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.AnvilBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -32,7 +37,22 @@ public class ModBlocks {
 
 
     public static final RegistryObject<Block> VAULT_RECYCLER = registerBlock("vault_recycler",
-            () -> new VaultRecyclerBlock(AbstractBlock.Properties.create(Material.ROCK).notSolid()));
+            () -> new VaultRecyclerBlock(AbstractBlock.Properties.create(Material.ROCK)
+                    .harvestLevel(2)
+                    .harvestTool(ToolType.PICKAXE).setRequiresTool()
+                    .hardnessAndResistance(3f)
+                    .notSolid()));
+
+    public static final RegistryObject<Block> SANCTIFIED_PEDESTAL = registerBlock("sanctified_pedestal",
+            () -> new SanctifiedPedestalBlock(AbstractBlock.Properties.create(Material.ROCK)
+                    .hardnessAndResistance(-1f)
+                    .notSolid()));
+
+    public static final RegistryObject<Block> DECAYED_CRYSTALLIZER = registerBlock("decayed_crystallizer",
+            () -> new DecayedCrystallizer(AbstractBlock.Properties.create(Material.IRON)
+                    .hardnessAndResistance(-1f)
+                    .notSolid()));
+
 
     private static <T extends Block>
     RegistryObject<T> registerBlock(String name, Supplier<T> block){
