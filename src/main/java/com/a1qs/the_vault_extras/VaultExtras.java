@@ -77,10 +77,6 @@ public class VaultExtras {
         VaultExtrasNetwork.init();
         ModGameRules.initialize();
         PaxelRegistry.registerEnhancements();
-
-        event.enqueueWork(() -> {
-            ModStructures.setupStructures();
-        });
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {

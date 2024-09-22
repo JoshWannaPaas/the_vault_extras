@@ -26,16 +26,10 @@ public class ModStructures {
 
     public static void setupStructures() {
         setupMapSpacingAndLand(RUINED_VAULT_PORTAL.get(),
-                new StructureSeparationSettings(50,25, 1234567890), // rarity defenitions
+                new StructureSeparationSettings(100,50, 1234567890),
                 true);
     }
 
-    /**
-     * Adds the provided structure to the registry, and adds the separation settings.
-     * The rarity of the structure is determined based on the values passed into
-     * this method in the structureSeparationSettings argument.
-     * This method is called by setupStructures above.
-     **/
     public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings,
                                                                        boolean transformSurroundingLand) {
         //add our structures into the map in Structure class
@@ -65,6 +59,7 @@ public class ModStructures {
          * spacing from this list into that dimension or to do dimension blacklisting properly.
          * We also use our entry in DimensionStructuresSettings.DEFAULTS in WorldEvent.Load as well.
          *
+         * DEFAULTS requires AccessTransformer  (See resources/META-INF/accesstransformer.cfg)
          */
         DimensionStructuresSettings.field_236191_b_ =
                 ImmutableMap.<Structure<?>, StructureSeparationSettings>builder()
@@ -102,7 +97,7 @@ public class ModStructures {
         });
     }
 
-    public static void register(IEventBus eventBus) {
-        STRUCTURES.register(eventBus);
+    public static void register(IEventBus bus) {
+        STRUCTURES.register(bus);
     }
 }
