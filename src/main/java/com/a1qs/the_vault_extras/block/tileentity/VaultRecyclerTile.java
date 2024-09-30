@@ -42,6 +42,8 @@ public class VaultRecyclerTile extends TileEntity implements ITickableTileEntity
     private int smeltTime;
     private int smeltTimeTotal;
     private final Random random = new Random();
+    private boolean internalInsert = false;
+    private boolean isInternalOperation = false;
 
     public VaultRecyclerTile(TileEntityType<?> tileEntityTypeIn) {
         super(tileEntityTypeIn);
@@ -73,43 +75,58 @@ public class VaultRecyclerTile extends TileEntity implements ITickableTileEntity
     }
 
     public void tick() {
-        assert world != null;
-        if(!world.isRemote) {
-            Inventory inv = new Inventory(itemHandler.getSlots());
+        if(world == null) return;
+        if(world.isRemote()) return;
 
-            for (int i = 0; i < itemHandler.getSlots(); i++) {
-                inv.setInventorySlotContents(i, itemHandler.getStackInSlot(i));
-            }
+        Inventory inv = new Inventory(itemHandler.getSlots());
 
-            ItemStack stack = inv.getStackInSlot(0);
-            if(!stack.isEmpty()) {
-                Optional<RecyclerRecipe> recipe = world.getRecipeManager()
-                        .getRecipe(ModRecipeTypes.RECYCLER_RECIPE, inv, world);
-                recipe.ifPresent(iRecipe -> {
-                    ItemStack output = iRecipe.getRecipeOutput();
-                    ItemStack extraOutput = iRecipe.getExtraOutput();
-                    float extraChance = iRecipe.getExtraChance();
-                    smeltTimeTotal = iRecipe.getSmeltTime();
-                    smeltItem(output, extraOutput, extraChance);
-                });
-            }
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            inv.setInventorySlotContents(i, itemHandler.getStackInSlot(i));
         }
+
+        ItemStack stack = inv.getStackInSlot(0);
+        if(!stack.isEmpty()) {
+            Optional<RecyclerRecipe> recipe = world.getRecipeManager()
+                    .getRecipe(ModRecipeTypes.RECYCLER_RECIPE, inv, world);
+            recipe.ifPresent(iRecipe -> {
+                ItemStack output = iRecipe.getRecipeOutput();
+                ItemStack extraOutput = iRecipe.getExtraOutput();
+                float extraChance = iRecipe.getExtraChance();
+                smeltTimeTotal = iRecipe.getSmeltTime();
+                smeltItem(output, extraOutput, extraChance);
+            });
+        } else {
+            smeltTime = 0;
+        }
+
     }
 
     private void smeltItem(ItemStack output, ItemStack extraOutput, float chance) {
         // if the stack in the inventory  is 63 or above, don't freaking do it !!
+        if(world == null) return;
+
         if(!(itemHandler.getStackInSlot(1).getCount() >= itemHandler.getSlotLimit(1)-1) && !(itemHandler.getStackInSlot(2).getCount() >= itemHandler.getSlotLimit(2)-1)) {
             smeltTime++;
             if(smeltTime >= smeltTimeTotal) {
                 smeltTime = 0;
+
+                isInternalOperation = true;
                 itemHandler.extractItem(0, 1, false);
+                isInternalOperation = false;
+                internalInsert = true;
                 itemHandler.insertItem(1, output, false);
+                internalInsert = false;
                 assert this.world != null;
                 this.world.playSound(null, this.getPos(), SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.BLOCKS, 0.5F + (new Random()).nextFloat() * 0.25F, 0.75F + (new Random()).nextFloat() * 0.25F);
-                spawnRecycleParticles(this.getPos());
+
+                if(world.isRemote) spawnRecycleParticles(this.getPos());
+
+
 
                 if(random.nextFloat() < chance && !output.getStack().isEmpty()) {
+                    internalInsert = true;
                     itemHandler.insertItem(2, extraOutput, false);
+                    internalInsert = false;
                 }
 
                 markDirty();
@@ -128,7 +145,6 @@ public class VaultRecyclerTile extends TileEntity implements ITickableTileEntity
 
             // make vault scrap/etching frags/magnetite/pog valid for output slots
             // make vault gear valid for input slots
-            // allows users to input vault scrap into the output slots, make a pr if it bothers you
             @Override
             public boolean isItemValid(int slot, @NotNull ItemStack stack) {
                 if (slot == 1 || slot == 2 || slot == 3) {
@@ -144,11 +160,30 @@ public class VaultRecyclerTile extends TileEntity implements ITickableTileEntity
             @NotNull
             @Override
             public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-                if(!isItemValid(slot, stack)) {
+                if (slot != 0 && !internalInsert) return stack;
+                if (!isItemValid(slot, stack)) {
                     return stack;
                 }
 
                 return super.insertItem(slot, stack, simulate);
+            }
+
+            @NotNull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                // Block extraction from external systems (hoppers, pipes, etc.) in the input slot
+                if (slot == 0) {
+                    if (!isInternalOperation && !isPlayerRequesting()) {
+                        return ItemStack.EMPTY; // Block non-player and non-internal extraction from input slot
+                    }
+                }
+
+                return super.extractItem(slot, amount, simulate);
+            }
+
+            //Check if world is clientsided
+            private boolean isPlayerRequesting() {
+                return world != null && world.isRemote();
             }
         };
     }
@@ -158,6 +193,7 @@ public class VaultRecyclerTile extends TileEntity implements ITickableTileEntity
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return handler.cast();
+
         }
         return super.getCapability(cap, side);
     }
